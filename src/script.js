@@ -99,6 +99,7 @@ ambientLightFolder.close()
 const directionalLight = new THREE.DirectionalLight(0xffffff,0.5)
 const directionalLightHelper = new THREE.DirectionalLightHelper(directionalLight);
 scene.add(directionalLight)
+scene.add(directionalLightHelper)
 directionalLightHelper.visible = false
 
 
