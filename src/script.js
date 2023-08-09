@@ -58,6 +58,11 @@ camera.position.y = 3
 camera.position.z = 3
 scene.add(camera)
 
+const cameraFolder = gui.addFolder('camera');
+cameraFolder.add(camera.position, 'x').min(-10).max(10).step(0.01)
+cameraFolder.add(camera.position, 'y').min(-10).max(10).step(0.01)
+cameraFolder.add(camera.position, 'z').min(-10).max(10).step(0.01)
+
 // Controls
 const controls = new OrbitControls(camera, canvas)
 controls.enableDamping = true
