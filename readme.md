@@ -5,6 +5,12 @@ Download [Node.js](https://nodejs.org/en/download/).
 Run this followed commands:
 
 ``` bash
+# Clone this template into a new project
+degit github:lucas-r-oliveira/threejs-template my-new-project
+
+# OR if you want just a subdirectory of the repo
+degit github:lucas-r-oliveira/threejs-template/subdirectory my-new-project
+
 # Install dependencies (only the first time)
 pnpm install
 
