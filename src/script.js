@@ -7,21 +7,36 @@ THREE.ColorManagement.enabled = false
 /**
  * Base
  */
-// Debug
+// -- Debug
 const gui = new GUI()
 
-// Canvas
+// -- Canvas
 const canvas = document.querySelector('canvas.webgl')
 
-// Scene
+// -- Scene
 const scene = new THREE.Scene()
+
+// -- Helpers
+const axesHelper = new THREE.AxesHelper(2);
+scene.add(axesHelper)
+
+const axesFolder = gui.addFolder('axes');
+axesFolder.add(axesHelper, 'visible');
+
+axesFolder.close()
+
+/**
+ * Textures
+ */
+const textureLoader = new THREE.TextureLoader();
+// const _Texture = texttureLoader.load('/textures/_');
 
 /**
  * Test cube
  */
 const cube = new THREE.Mesh(
     new THREE.BoxGeometry(1, 1, 1),
-    new THREE.MeshBasicMaterial()
+    new THREE.MeshStandardMaterial()
 )
 scene.add(cube)
 
@@ -63,6 +78,41 @@ cameraFolder.add(camera.position, 'x').min(-10).max(10).step(0.01)
 cameraFolder.add(camera.position, 'y').min(-10).max(10).step(0.01)
 cameraFolder.add(camera.position, 'z').min(-10).max(10).step(0.01)
 
+/**
+ * Lights
+ */
+const lightsFolder = gui.addFolder('lights');
+lightsFolder.close()
+
+// -- Ambient Light
+const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+scene.add(ambientLight)
+
+const ambientLightFolder = lightsFolder.addFolder('ambient light');
+ambientLightFolder.addColor(ambientLight, 'color');
+ambientLightFolder.add(ambientLight, 'intensity').min(0).max(1).step(0.01);
+ambientLightFolder.add(ambientLight, 'visible');
+ambientLightFolder.close()
+
+
+// -- Directional Light
+const directionalLight = new THREE.DirectionalLight(0xffffff,0.5)
+const directionalLightHelper = new THREE.DirectionalLightHelper(directionalLight);
+scene.add(directionalLight)
+directionalLightHelper.visible = false
+
+
+const directionalLightFolder = lightsFolder.addFolder('directional light');
+directionalLightFolder.addColor(directionalLight, 'color');
+directionalLightFolder.add(directionalLight, 'intensity').min(0).max(2).step(0.01);
+directionalLightFolder.add(directionalLight.position, 'x').min(-5).max(5).step(0.01);
+directionalLightFolder.add(directionalLight.position, 'y').min(-5).max(5).step(0.01);
+directionalLightFolder.add(directionalLight.position, 'z').min(-5).max(5).step(0.01);
+
+directionalLightFolder.add(directionalLight, 'visible').name("light visible");
+directionalLightFolder.add(directionalLightHelper, 'visible').name("helper visible");
+directionalLightFolder.close()
+
 // Controls
 const controls = new OrbitControls(camera, canvas)
 controls.enableDamping = true
@@ -77,6 +127,9 @@ renderer.outputColorSpace = THREE.LinearSRGBColorSpace
 renderer.setSize(sizes.width, sizes.height)
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
 
+// Change background color of scene
+//renderer.setClearColor(0xffffff)
+
 /**
  * Animate
  */
@@ -88,6 +141,9 @@ const tick = () =>
 
     // Update controls
     controls.update()
+
+	// Helper controls
+	directionalLightHelper.update();
 
     // Render
     renderer.render(scene, camera)
